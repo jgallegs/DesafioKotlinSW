@@ -4,6 +4,7 @@ import EnumClasses.*
 import Factorias.*
 
 class Sala(var numero: Int) {
+    //La sala está compuesta de un número de sala, y una lista de los pacientes y los medicos que la ocupan
     var pacientes: ArrayList<Paciente> = ArrayList()
     var medicos: ArrayList<Medico> = ArrayList()
 
@@ -11,6 +12,9 @@ class Sala(var numero: Int) {
         return "Sala $numero \n\t$pacientes \n\t$medicos"
     }
 
+    /**
+     * Genera tantos medicos como especialidades haya, para tener uno de cada en cada sala
+     */
     fun genMedicos() {
         medicos.clear()
         var size: Int = especialidades.values().size
@@ -21,14 +25,17 @@ class Sala(var numero: Int) {
         }
     }
 
-    fun ordenar() {
-        pacientes.sortBy { it.prioridad }
-    }
-
+    /**
+     * Agrega un paciente al ArrayList
+     */
     fun addPaciente(paciente: Paciente): Boolean {
         pacientes.add(paciente)
         return true;
     }
+
+    /**
+     * Elimina un paciente para derivarlo
+     */
     fun derivarPaciente(paciente: Paciente) {
         pacientes.remove(paciente)
     }

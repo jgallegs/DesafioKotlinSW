@@ -4,6 +4,10 @@ import EnumClasses.*
 
 class Medico (NIDI: Int, n: String, var especialidad: especialidades) : Persona(NIDI, n) {
     var compTrabaja: ArrayList<compSeguros> = ArrayList()
+
+    /**
+     * Al crear un medico, se eligen dos compañias de entre todas las que hay.
+     */
     init {
         while (compTrabaja.size < 2) {
             val comp = compSeguros.values().random()

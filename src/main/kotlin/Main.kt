@@ -1,9 +1,9 @@
 import EnumClasses.*
 import Modelos.*
 
+var pacientesAtendidos: Int = 0
+var pacientesDerivados: Int = 0
 fun main() {
-    var pacientesAtendidos: Int = 0
-    var pacientesDerivados: Int = 0
     var nave: Nave = Nave()
     var dia: Int = 1
     var diaSemana: DiasSemana
@@ -19,7 +19,10 @@ fun main() {
         }
         dia++
     }
-    println("Pacientes atendidos: $pacientesAtendidos")
-    println("Pacientes derivados: $pacientesDerivados")
+    println("----------------------------------")
+    println(pacientesTotales())
     nave.impPacientes()
+}
+fun pacientesTotales(): String {
+    return "Pacientes atendidos en total: $pacientesAtendidos\nPacientes derivados en total: $pacientesDerivados"
 }
