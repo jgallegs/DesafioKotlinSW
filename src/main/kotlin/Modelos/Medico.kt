@@ -14,8 +14,8 @@ class Medico (NIDI: Int, n: String, var especialidad: especialidades) : Persona(
     }
 
     override fun toString(): String {
-        return "\n$nombre " +
-                "\n\tWspecialidad $especialidad, compañias: ${compTrabaja.get(0)} y ${compTrabaja.get(1)}"
+        return "\n\t$nombre " +
+                "\n\tEspecialidad $especialidad, compañias: ${compTrabaja.get(0)} y ${compTrabaja.get(1)}"
     }
 
 }

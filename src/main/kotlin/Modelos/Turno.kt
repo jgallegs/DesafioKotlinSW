@@ -4,9 +4,12 @@ import EnumClasses.*
 import Factorias.*
 
 class Turno(var tipo: Turnos, val nave: Nave) {
+    var pacientesAtendidos: Int = 0
+    var pacientesDerivados: Int = 0
+
     init {
         if (nave.iniciarTurno()) {
-            println("\tComienza el turno de $tipo")
+            println("\tComienza el turno de $tipo ----------------------------------------------")
         }
     }
     fun simulacion() {
@@ -15,17 +18,56 @@ class Turno(var tipo: Turnos, val nave: Nave) {
             if (tiempo % 2 == 0) {
                 llegarPaciente()
             }
+            if (tiempo % 4 == 0) {
+                atenderPaciente(nave.comprobarSala())
+            }
             tiempo++
             Thread.sleep(1000)
         }
+        println("\tTermina el turno de $tipo, con $pacientesAtendidos pacientes atendidos y $pacientesDerivados derivados. ----------------------------------------------")
+        nave.impPacientes()
     }
 
     fun llegarPaciente() {
         var pNuevo: Paciente = Factoria.crearPaciente()
         nave.addPaciente(pNuevo)
-        println("Llega el paciente ${pNuevo.nombre} con ${pNuevo.atencion} y prioridad ${pNuevo.prioridad}")
-        println("Ahora las salas están así: ")
-        nave.mostrarSalas()
     }
-
+    fun atenderPaciente(salaAct: Sala) {
+        if (salaAct.pacientes.size > 0) {
+            var pacienteAtendido: Paciente = salaAct.pacientes[0]
+            when (pacienteAtendido.atencion) {
+                atencionRequerida.Quemadura_Laser -> {
+                    for (medico in salaAct.medicos) {
+                        if (medico.especialidad == especialidades.Traumatologia) {
+                            if (medico.compTrabaja[0] == pacienteAtendido.seguro || medico.compTrabaja[1] == pacienteAtendido.seguro) {
+                                salaAct.pacientes.remove(pacienteAtendido)
+                                println("El paciente ${pacienteAtendido.nombre} ha sido atendido por el medico ${medico.nombre}")
+                                pacientesAtendidos++
+                                break
+                            }
+                        }
+                    }
+                }
+                atencionRequerida.Impacto_Chorritronico -> {
+                    for (medico in salaAct.medicos) {
+                        if (medico.especialidad == especialidades.Medicina_Interna) {
+                            if (medico.compTrabaja[0] == pacienteAtendido.seguro || medico.compTrabaja[1] == pacienteAtendido.seguro) {
+                                salaAct.pacientes.remove(pacienteAtendido)
+                                println("El paciente ${pacienteAtendido.nombre} ha sido atendido por el medico ${medico.nombre}")
+                                pacientesAtendidos++
+                                break
+                            }
+                        }
+                    }
+                }
+                atencionRequerida.Otros -> {
+                    salaAct.derivarPaciente(pacienteAtendido)
+                    println("PACIENTE ${pacienteAtendido.nombre} DERIVADO")
+                    pacientesDerivados++
+                }
+            }
+        } else {
+            println("No hay pacientes en la sala")
+        }
+    }
 }
